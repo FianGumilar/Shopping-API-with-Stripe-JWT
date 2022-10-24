@@ -29,7 +29,7 @@ const verifyTokenAndAdmin = (req, res, next) => {
         if(req.user.isAdmin){
             next();
         } else {
-            return res.send(403).send("you don't have permission to access");
+            return res.status(403).send("you don't have permission to access");
         }
     })
 }

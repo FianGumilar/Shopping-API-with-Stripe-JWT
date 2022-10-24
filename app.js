@@ -5,8 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
-const authRoutes = require('./routes/auth')
-const userRoutes = require('./routes/users')
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+const productRoutes = require('./routes/product');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/products', productRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('DB Connection Successful!'))
