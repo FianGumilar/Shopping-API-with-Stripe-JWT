@@ -3,7 +3,7 @@ const router = express.Router();
 const Product = require('../models/Product');
 const { verifyTokenAndAuthorization, verifyTokenAndAdmin } = require('./verifyToken');
 
-//CREATE
+//CREATE PRODUCT
 router.post('/', verifyTokenAndAdmin, async (req, res, next) => {
     const newProduct = new Product(req.body);
     try {
@@ -14,7 +14,7 @@ router.post('/', verifyTokenAndAdmin, async (req, res, next) => {
     }
 })
 
-//GET ALL USERS
+//GET ALL USER RODUCTS
 router.get('/', async(req, res, next) => {
     const qNew = req.query.new;
     const qCategory = req.query.category;
@@ -40,17 +40,17 @@ router.get('/', async(req, res, next) => {
 
 })
 
-//GET BY ID
-router.get('/:id', async (req, res, next) => {
+//GET PRODUCT BY ID
+router.get('/:userId', async (req, res, next) => {
     try {
-        const product = await Product.findById(req.params.id);
-        res.status(200).json(product);
+        const products = await Product.findOne({ userId: req.params.userId});
+        res.status(200).json(products);
     } catch(err) {
         return res.status(404).send(err);
     }
 });
 
-//UPDATE
+//UPDATE PRODUCT
 router.patch('/update/:id', verifyTokenAndAdmin, async (req, res, next) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
@@ -63,7 +63,7 @@ router.patch('/update/:id', verifyTokenAndAdmin, async (req, res, next) => {
     }
 });
 
-//DELETE
+//DELETE PRODUCT
 router.delete('/delete/:id', verifyTokenAndAdmin, async(req, res, next) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
@@ -72,30 +72,5 @@ router.delete('/delete/:id', verifyTokenAndAdmin, async(req, res, next) => {
         res.status(500).send(err);
     }
 });
-
-// router.get('/static', verifyTokenAndAdmin, async (req, res, next) => {
-//     const date = new Date();
-//     const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
-  
-//     try {
-//       const data = await User.aggregate([
-//         { $match: { createdAt: { $gte: lastYear } } },
-//         {
-//           $project: {
-//             month: { $month: "$createdAt" },
-//           },
-//         },
-//         {
-//           $group: {
-//             _id: "$month",
-//             total: { $sum: 1 },
-//           },
-//         },
-//       ]);
-//       res.status(200).send(data);
-//     } catch (err) {
-//       res.status(500).send(err);
-//     }
-//   });
 
 module.exports = router;
